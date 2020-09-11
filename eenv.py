@@ -1,7 +1,7 @@
 import sys
 
 def checkForVariables(input):
-    '''Check for empty lines and comments'''
+    """Check for lines without assignments"""
     if "\n" == input:
         return False
     elif "=" not in input:
@@ -10,6 +10,7 @@ def checkForVariables(input):
         return True
 
 def extractValues(inputDictionary, input):
+    """Attempt to resolve variables to previously known values"""
     variable = input.split("<")[1].split(">")[0]
     try:
         result = inputDictionary[variable]
@@ -19,6 +20,7 @@ def extractValues(inputDictionary, input):
         exit(1)
 
 def readIn(filename):
+    """Read in an .eenv file"""
     try:
         fileHandleIn = open(filename, "r")
         output = fileHandleIn.readlines()
@@ -29,6 +31,7 @@ def readIn(filename):
         exit(1)
 
 def writeEnv(inputDictionary, filename, mode):
+    """Write out an .env file"""
     try:
         fileHandleOut = open(filename, mode)
         for i, j in inputDictionary.items():
@@ -39,6 +42,7 @@ def writeEnv(inputDictionary, filename, mode):
         exit(1)
 
 def writeOut(inputDictionary, filename):
+    """Determine if the specified .env file target exists and if so, should it be overwritten"""
     try:
         writeEnv(inputDictionary, filename, "x")
     except FileExistsError:
@@ -49,6 +53,7 @@ def writeOut(inputDictionary, filename):
             exit(1)
 
 def processArguments():
+    """Determine if eenv was invoked with exactly three arguments (including the program itself)"""
     argumentsList = sys.argv
     if len(argumentsList) != 3:
         print("ERROR: Invalid arguments detected!")
@@ -56,6 +61,7 @@ def processArguments():
     return argumentsList
 
 def iterate(contents):
+    """Iterate through lines of the file to build the variable dictionary"""
     variables = {}
     for i in contents:
         if checkForVariables(i):
@@ -66,6 +72,7 @@ def iterate(contents):
     return variables
 
 def main():
+    """Main program loop"""
     arguments = processArguments()
     contents = readIn(arguments[1])
     variables = iterate(contents)
