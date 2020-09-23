@@ -65,7 +65,7 @@ def iterate(contents):
     variables = {}
     for i in contents:
         if checkForVariables(i):
-            splitVals = i.split("=")
+            splitVals = i.split("=", 1)
             if "<" in splitVals[1]:
                 splitVals[1] = extractValues(variables, splitVals[1])
             variables[splitVals[0]] = splitVals[1].strip("\n")
